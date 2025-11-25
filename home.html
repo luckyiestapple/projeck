@@ -7,17 +7,23 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <nav class="navbar">
-      <div class="'logo">Citra Medika</div>
-      <ul>
-        <li><a href="home.html">Home</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
+   <div class="navbar">
+  <div class="nav-left">
+    <div class="logo"></div>
+    <span class="brand">Citra Medika</span>
+  </div>
+
+  <ul>
+    <li><a href="home.html" class="active">Home</a></li>
+    <li><a href="login.html">Login</a></li>
+    <li><a href="register.html">Register</a></li>
+  </ul>
+</div>
       </ul>
     </nav>
     <header class="hero-slider">
       <div class="slide fade">
-        <img src=".../img/gedung.png" class="hero-img" alt="Rumah Sakit 1" />
+        <img src="img/gedung.png" class="hero-img" alt="Rumah Sakit 1" />
       </div>
       <div class="slide fade">
         <img src="img/rs2.png" class="hero-img" alt="Rumah Sakit 2" />
@@ -52,5 +58,32 @@
         </div>
       </div>
     </section>
+    <script>
+      let slideIndex = 0;
+      showSlides();
+
+      function showSlides() {
+        let slides = document.getElementsByClassName("slide");
+        let dots = document.getElementsByClassName("dot");
+
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+
+        slideIndex++;
+        if (slideIndex > slides.length) {
+          slideIndex = 1;
+        }
+
+        for (let i = 0; i < dots.length; i++) {
+          dots[i].className = dots[i].className.replace(" active", "");
+        }
+
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+
+        setTimeout(showSlides, 3000);
+      }
+    </script>
   </body>
 </html>

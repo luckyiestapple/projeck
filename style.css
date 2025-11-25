@@ -1,22 +1,51 @@
 .navbar {
   display: flex;
   justify-content: space-between;
-  padding: 15px 30px;
-  background-color: #1e88e5;
-  color: white;
+  align-items: center;
+  padding: 1px 20px;
+  background-color: #f0f0f1;
+  color: rgb(26, 25, 25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: auto;
 }
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 140px;
+  height: 90px;
+  background-image: url("img/logo (2).png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.brand {
+  font-size: 28px;
+  font-weight: bold;
+  color: rgb(6, 6, 6);
+  font-family: serif;
+}
+
 .navbar ul {
   display: flex;
   list-style: none;
+  align-items: center;
+  gap: 25px;
+  margin: 0;
 }
-.navbar ul li {
-  margin-left: 20px;
-}
-.navbar a {
-  color: white;
+
+.navbar ul li a {
+  color: rgb(19, 18, 18);
   text-decoration: none;
   font-weight: bold;
+  font-size: 18px;
 }
+
 .navbar a.active {
   text-decoration: underline;
 }
@@ -24,12 +53,14 @@
 .hero {
   position: relative;
 }
-.hero img {
+
+.hero-img {
   width: 100%;
-  height: 350px;
+  height: 570px;
   object-fit: cover;
-  border-bottom: 3px solid #1e88e5;
+  object-position: center;
 }
+
 .hero text {
   position: absolute;
   bottom: 20px;
@@ -40,15 +71,62 @@
   text-shadow: 2px 2px 5px black;
 }
 
+.hero-slider {
+  position: relative;
+  max-width: 100%;
+  background-color: #e5f1ff;
+}
+
+.slide {
+  display: none;
+}
+
+.fade {
+  animation: fadeEffect 1.5s;
+}
+
+@keyframes fadeEffect {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dots {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  margin: 0 4px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: #1e88e5;
+}
+
 .jadwal {
   padding: 40px;
   text-align: center;
 }
+
 .card-container {
   display: flex;
   justify-content: center;
   gap: 20px;
 }
+
 .card {
   background: white;
   padding: 20px;
@@ -56,6 +134,7 @@
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
+
 .card h3 span {
   font-size: 14px;
   color: gray;
@@ -64,6 +143,7 @@
 .dashboard {
   padding: 40px;
 }
+
 .info-box {
   background: white;
   padding: 20px;
@@ -75,6 +155,7 @@
 .form-section {
   padding: 40px;
 }
+
 .form-container {
   background: white;
   padding: 25px;
@@ -83,9 +164,11 @@
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .form-container label {
   font-weight: bold;
 }
+
 .form-container input,
 .form-container select {
   width: 100%;
@@ -94,6 +177,7 @@
   border: 1px solid #aaa;
   border-radius: 6px;
 }
+
 .btn {
   width: 100%;
   background: #1e88e5;
@@ -102,44 +186,4 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-}
-.hero-slider {
-  position: relative;
-  max-width: 100%;
-}
-.slide {
-  display: none;
-}
-.fade {
-  animation: fadeEffect 1.5s;
-}
-@keyframes fadeEffect {
-  from {
-    opacity: 0.4;
-  }
-  to {
-    opacity: 1;
-  }
-}
-.hero-img {
-  width: 100%;
-  height: 350px;
-  object-fit: cover;
-  border-bottom: 3px solid #1e88e5;
-}
-.dots {
-  text-align: center;
-  margin-top: 10px;
-}
-.dot {
-  height: 12px;
-  width: 12px;
-  margin: 0 4px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  cursor: pointer;
-}
-.dot.active {
-  background-color: #1e88e5;
 }
