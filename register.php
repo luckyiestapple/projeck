@@ -316,7 +316,7 @@ textarea {
 </head>
 <body>
     <div class="card">
-        <div class="header"><i class="fa-solid fa-hospital"></i><h2>Sistem Antrian RS</h2></div>
+        <div class="header"><i class="fa-solid fa-hospital"></i><h2>Rs Citra Medika</h2></div>
 
         <div class="tabs">
             <a href="signin.php" class="tab-item">Sign In</a>

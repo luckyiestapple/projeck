@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && empty($error)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Antrian RS - Sign In</title>
+    <title>RS Citra Medika</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && empty($error)) {
 <body>
 
     <div class="card">
-        <div class="header"><i class="fa-solid fa-hospital"></i><h2>Sistem Antrian RS</h2></div>
+        <div class="header"><i class="fa-solid fa-hospital"></i><h2>RS Citra Medika</h2></div>
 
         <div class="tabs">
             <a href="signin.php" class="tab-item active">Sign In</a>
