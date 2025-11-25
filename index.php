@@ -64,7 +64,7 @@ $jadwal = $konek->query("
     <div class="carousel-inner">
 
         <div class="carousel-item active">
-            <img src="assets/img/hero1.jpg" class="d-block w-100" style="height:420px; object-fit:cover;">
+            <img src="img/gedung.jpg" class="d-block w-100" style="height:500px; object-fit:cover;">
             <div class="carousel-caption d-none d-md-block text-start">
                 <h1 class="hero-title">Pelayanan Kesehatan Terbaik</h1>
                 <p>Didukung dokter profesional & peralatan modern.</p>
@@ -72,7 +72,7 @@ $jadwal = $konek->query("
         </div>
 
         <div class="carousel-item">
-            <img src="assets/img/hero2.jpg" class="d-block w-100" style="height:420px; object-fit:cover;">
+            <img src="img/rs2.png" class="d-block w-100" style="height: 500px; object-fit:cover;">
             <div class="carousel-caption d-none d-md-block text-start">
                 <h1 class="hero-title">Daftar Antrian Lebih Mudah</h1>
                 <p>Semuanya serba online, tanpa ribet.</p>
@@ -80,7 +80,7 @@ $jadwal = $konek->query("
         </div>
 
         <div class="carousel-item">
-            <img src="assets/img/hero3.jpg" class="d-block w-100" style="height:420px; object-fit:cover;">
+            <img src="img/dokter.png" class="d-block w-100" style="height:500px; object-fit:cover;">
             <div class="carousel-caption d-none d-md-block text-start">
                 <h1 class="hero-title">Rekam Medis Digital</h1>
                 <p>Akses riwayat kesehatan Anda kapan saja.</p>
