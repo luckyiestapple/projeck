@@ -1,32 +1,24 @@
 <?php
 session_start();
-
-// Koneksi database
 $konek = new mysqli("localhost", "root", "", "rumahsakit");
 
-// Cek koneksi
 if ($konek->connect_error) {
     die("Koneksi gagal: " . $konek->connect_error);
 }
-
-// Proses login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = $_POST["email"] ?? "";
     $password = $_POST["password"] ?? "";
 
-    // Query cek akun
     $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
     $result = mysqli_query($konek, $sql);
 
     if (mysqli_num_rows($result) > 0) {
     $data = mysqli_fetch_assoc($result);
 
-    // Simpan sesi
     $_SESSION['email'] = $data['email'];
     $_SESSION['nama'] = $data['nama'];
     $_SESSION['role'] = $data['role'];
 
-    // Arahkan sesuai role
     if ($data['role'] == "admin") {
         header("Location: admin_dashboard.php");
     } elseif ($data['role'] == "dokter") {
