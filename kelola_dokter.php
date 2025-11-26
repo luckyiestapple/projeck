@@ -77,7 +77,7 @@ $dokter = $konek->query("SELECT * FROM dokter ORDER BY nama ASC");
                 <i class="fa-solid fa-user-doctor me-2"></i> Kelola Dokter
             </span>
             <div class="d-flex align-items-center">
-                <a href="indexadmin.php" class="btn btn-outline-secondary btn-sm me-2">
+                <a href="dashboard_admin.php" class="btn btn-outline-secondary btn-sm me-2">
                     <i class="fa-solid fa-house"></i> Overview
                 </a>
                 <a href="logout.php" class="btn btn-outline-danger btn-sm">
