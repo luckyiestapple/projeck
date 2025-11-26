@@ -53,7 +53,7 @@ $jadwal = $konek->query("
                 <li class="nav-item"><a class="nav-link" href="#dokter">Dokter</a></li>
                 <li class="nav-item"><a class="nav-link" href="#jadwal">Jadwal</a></li>
                 <li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm ms-2" href="login.php">Masuk</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-primary btn-sm ms-2 text-white" href="register.php">Daftar</a></li>
+                <li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm ms-2" href="register.php">Daftar</a></li>
             </ul>
         </div>
     </div>
