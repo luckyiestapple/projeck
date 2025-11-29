@@ -8,6 +8,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "dokter") {
 }
 
 $id_dokter = $_SESSION["id_dokter"];
+$today = date('Y-m-d'); // <-- Tentukan tanggal hari ini
 
 // MODE AJAX → realtime data
 if (isset($_GET["ajax"]) && $_GET["ajax"] == "1") {
@@ -17,6 +18,7 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "1") {
         LEFT JOIN pasien p ON p.id = a.pasien_id
         LEFT JOIN poli pl ON pl.id = a.poli_id
         WHERE a.dokter_id = $id_dokter
+          AND DATE(a.waktu_daftar) = '$today' -- <-- BARIS KRUSIAL (FILTER TANGGAL)
         ORDER BY a.status = 'Menunggu' DESC, a.waktu_daftar ASC
     ");
 
@@ -77,8 +79,7 @@ if (isset($_GET["id"]) && isset($_GET["s"])) {
         </thead>
 
         <tbody id="tbody-antrian">
-            <!-- realtime JS -->
-        </tbody>
+            </tbody>
     </table>
 </div>
 

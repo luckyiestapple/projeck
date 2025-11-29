@@ -1,73 +1,79 @@
 <?php
-require "koneksi.php";
+session_start();
+require "koneksi.php"; // Pastikan file koneksi.php sudah tersedia
 
-$errors = [];
-$success = "";
+$error = '';
+$success = '';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // 1. Ambil dan Sanitasi Input
+    $nama            = htmlspecialchars($_POST['nama']);
+    $email           = htmlspecialchars($_POST['email']);
+    $password        = $_POST['password'];
+    $alamat          = htmlspecialchars($_POST['alamat']);
+    $no_hp           = htmlspecialchars($_POST['no_hp']);
+    $tanggal_lahir   = htmlspecialchars($_POST['tgl_lahir']);
+    $jenis_kelamin   = htmlspecialchars($_POST['jenis_kelamin']);
 
-    $nama          = trim($_POST["nama"] ?? "");
-    $email         = trim($_POST["email"] ?? "");
-    $password      = $_POST["password"] ?? "";
-    $confirm       = $_POST["confirm_password"] ?? "";
-    $jenis_kelamin = $_POST["jenis_kelamin"] ?? "";
-    $tgl_lahir     = $_POST["tgl_lahir"] ?? "";
-    $no_hp         = trim($_POST["no_hp"] ?? "");
-    $alamat        = trim($_POST["alamat"] ?? "");
-
-    if ($nama === "" || $email === "" || $password === "") {
-        $errors[] = "Nama, Email, dan Password wajib diisi.";
+    // 2. Validasi Dasar
+    if (empty($nama) || empty($email) || empty($password) || empty($alamat) || empty($no_hp)) {
+        $error = "Semua kolom wajib diisi!";
     }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Format email tidak valid.";
+    // 3. Cek apakah email sudah terdaftar
+    $stmt_email = $konek->prepare("SELECT id FROM pasien WHERE email = ?");
+    $stmt_email->bind_param("s", $email);
+    $stmt_email->execute();
+    $stmt_email->store_result();
+    if ($stmt_email->num_rows > 0) {
+        $error = "Email sudah terdaftar. Silakan gunakan email lain atau login.";
     }
+    $stmt_email->close();
 
-    if ($password !== $confirm) {
-        $errors[] = "Konfirmasi password tidak cocok.";
-    }
+    // 4. GENERASI NOMOR REKAM MEDIS OTOMATIS (FIX UNTUK DUPLICATE ENTRY)
+    if (empty($error)) {
+        $no_rm = '';
+        
+        // Ambil nomor RM terbesar saat ini
+        $q = $konek->query("SELECT no_rm FROM pasien ORDER BY id DESC LIMIT 1");
+        $lastRM = $q->fetch_assoc();
 
-    // cek email sudah ada atau belum
-    if (empty($errors)) {
-        $cek = $konek->prepare("SELECT id FROM pasien WHERE email = ? LIMIT 1");
-        $cek->bind_param("s", $email);
-        $cek->execute();
-        $result = $cek->get_result();
-        if ($result->num_rows > 0) {
-            $errors[] = "Email sudah terdaftar.";
+        if ($lastRM) {
+            // Asumsi format: RM[angka]
+            $lastNumber = (int) substr($lastRM['no_rm'], 2); // Ambil angka setelah 'RM'
+            $newNumber = $lastNumber + 1;
+        } else {
+            // Jika data kosong, mulai dari 1
+            $newNumber = 1;
         }
-        $cek->close();
-    }
 
-    if (empty($errors)) {
-        $no_rm = "RM" . time();
-        $hash  = password_hash($password, PASSWORD_BCRYPT);
+        // Format angka menjadi 4 digit (misal: 1 -> 0001, 1765 -> 1765)
+        $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        $no_rm = 'RM' . $formattedNumber;
 
-        // 👇 TANPA KELUHAN
-        $stmt = $konek->prepare("
-            INSERT INTO pasien (no_rm, nama, email, password, jenis_kelamin, tgl_lahir, alamat, no_hp)
+        // 5. Hash Password
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // 6. Masukkan Data ke Database
+        $stmt_insert = $konek->prepare("
+            INSERT INTO pasien (no_rm, nama, email, password, alamat, no_hp, tgl_lahir, jenis_kelamin) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
-        $stmt->bind_param(
-            "ssssssss",
-            $no_rm,
-            $nama,
-            $email,
-            $hash,
-            $jenis_kelamin,
-            $tgl_lahir,
-            $alamat,
-            $no_hp
+        $stmt_insert->bind_param("ssssssss", 
+            $no_rm, $nama, $email, $hashed_password, $alamat, $no_hp, $tanggal_lahir, $jenis_kelamin
         );
 
-        if ($stmt->execute()) {
-            $success = "Pendaftaran berhasil! Silakan login.";
-            $nama = $email = $jenis_kelamin = $tgl_lahir = $no_hp = $alamat = "";
+        if ($stmt_insert->execute()) {
+            // 7. Registrasi Sukses, Otomatis Login
+            $_SESSION["id_pasien"] = $konek->insert_id;
+            $_SESSION["nama"]      = $nama;
+            $_SESSION["role"]      = "pasien";
+            header("Location: dashboard_pasien.php");
+            exit;
         } else {
-            $errors[] = "Terjadi kesalahan saat menyimpan data.";
+            $error = "Pendaftaran gagal. Silakan coba lagi. (" . $konek->error . ")";
         }
-
-        $stmt->close();
+        $stmt_insert->close();
     }
 }
 ?>
@@ -75,171 +81,67 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Registrasi Pasien</title>
-
+    <title>Daftar Akun Pasien</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-
-        body {
-            min-height: 100vh;
-            background: radial-gradient(circle at top, #e0f2ff 0, #f4f6fb 45%, #eef1f6 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-auth {
-            width: 460px;
-            background: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
-            padding: 26px 30px 30px;
-        }
-
-        .auth-title {
-            font-size: 26px;
-            font-weight: 700;
-            text-align: center;
-            color: #111827;
-        }
-
-        .auth-subtitle {
-            text-align: center;
-            font-size: 13px;
-            color: #6b7280;
-            margin-bottom: 16px;
-        }
-
-        label {
-            font-size: 13px;
-            font-weight: 500;
-            color: #374151;
-        }
-
-        .form-control, .form-select {
-            border-radius: 10px;
-            border-color: #d1d5db;
-            padding: 9px 11px;
-            font-size: 14px;
-        }
-
-        .form-control:focus, .form-select:focus {
-            box-shadow: 0 0 0 3px rgba(59,130,246,.25);
-            border-color: #2563eb;
-        }
-
-        .btn-primary {
-            border-radius: 999px;
-            padding: 10px 16px;
-            font-weight: 600;
-            background: #2563eb;
-            border-color: #2563eb;
-        }
-
-        .btn-primary:hover {
-            background: #1d4ed8;
-        }
-
-        .small-text {
-            font-size: 13px;
-        }
-
-        .error-alert, .success-alert {
-            font-size: 13px;
-            padding: 8px 10px;
-            border-radius: 10px;
-        }
-
-        .row-tight { --bs-gutter-x: 0.75rem; }
+        body { background: linear-gradient(to right, #e0f7fa, #ffffff); }
+        .register-box { max-width: 500px; margin: 50px auto; padding: 30px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); background: white; }
     </style>
 </head>
 <body>
 
-<div class="card-auth">
+<div class="register-box">
+    <h3 class="text-center text-primary mb-4"><i class="fas fa-user-plus me-2"></i> Daftar Akun Pasien</h3>
 
-    <h1 class="auth-title">Daftar Pasien</h1>
-    <p class="auth-subtitle">Buat akun untuk mengakses antrian dan rekam medis Anda.</p>
-
-    <?php if (!empty($errors)): ?>
-        <div class="alert alert-danger error-alert">
-            <ul class="mb-0">
-                <?php foreach ($errors as $e): ?>
-                    <li><?= htmlspecialchars($e) ?></li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+    <?php if ($error): ?>
+        <div class="alert alert-danger" role="alert"><?= $error ?></div>
     <?php endif; ?>
 
-    <?php if ($success): ?>
-        <div class="alert alert-success success-alert">
-            <?= htmlspecialchars($success) ?>  
-            <a href="login.php" class="alert-link">Login</a>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="nama" class="form-label">Nama Lengkap</label>
+            <input type="text" class="form-control" id="nama" name="nama" required>
         </div>
-    <?php endif; ?>
-
-    <form method="POST" autocomplete="off">
-
-        <div class="mb-2">
-            <label>Nama Lengkap</label>
-            <input type="text" name="nama" class="form-control" required
-                   value="<?= htmlspecialchars($nama ?? "") ?>">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
         </div>
-
-        <div class="mb-2">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" required
-                   value="<?= htmlspecialchars($email ?? "") ?>">
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password" required>
         </div>
-
-        <div class="row row-tight">
-            <div class="col-6 mb-2">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
+        <div class="mb-3">
+            <label for="alamat" class="form-label">Alamat</label>
+            <textarea class="form-control" id="alamat" name="alamat" rows="2" required></textarea>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="no_hp" class="form-label">No. HP</label>
+                <input type="text" class="form-control" id="no_hp" name="no_hp" required>
             </div>
-            <div class="col-6 mb-2">
-                <label>Konfirmasi</label>
-                <input type="password" name="confirm_password" class="form-control" required>
+            <div class="col-md-6 mb-3">
+                <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                <input type="date" class="form-control" id="tgl_lahir" name="tanggal_lahir" required>
             </div>
         </div>
-
-        <div class="row row-tight">
-            <div class="col-6 mb-2">
-                <label>Jenis Kelamin</label>
-                <select name="jenis_kelamin" class="form-select">
-                    <option value="">- Pilih -</option>
-                    <option value="L" <?= (isset($jenis_kelamin) && $jenis_kelamin=="L")?"selected":"" ?>>Laki-laki</option>
-                    <option value="P" <?= (isset($jenis_kelamin) && $jenis_kelamin=="P")?"selected":"" ?>>Perempuan</option>
-                </select>
-            </div>
-            <div class="col-6 mb-2">
-                <label>Tanggal Lahir</label>
-                <input type="date" name="tgl_lahir" class="form-control"
-                       value="<?= htmlspecialchars($tgl_lahir ?? "") ?>">
-            </div>
+        <div class="mb-3">
+            <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
+            <select class="form-select" id="jenis_kelamin" name="jenis_kelamin" required>
+                <option value="">Pilih...</option>
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+            </select>
         </div>
-
-        <div class="mb-2">
-            <label>No HP</label>
-            <input type="text" name="no_hp" class="form-control"
-                   value="<?= htmlspecialchars($no_hp ?? "") ?>">
-        </div>
-
-        <div class="mb-2">
-            <label>Alamat</label>
-            <textarea name="alamat" class="form-control" rows="2"><?= htmlspecialchars($alamat ?? "") ?></textarea>
-        </div>
-
-        <button class="btn btn-primary w-100 mt-2">Daftar</button>
-
-        <p class="mt-3 text-center small-text">
-            Sudah punya akun?
-            <a href="login.php" class="text-decoration-none">Login di sini</a>
-        </p>
+        
+        <button type="submit" class="btn btn-primary w-100 mt-2">Daftar</button>
     </form>
+    
+    <div class="text-center mt-3">
+        Sudah punya akun? <a href="login.php">Login di sini</a>
+    </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -324,18 +324,7 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
                 </div>
             </div>
 
-            <div class="col-md-3 col-6">
-                <div class="menu-card">
-                    <div class="menu-title">Jadwal Dokter</div>
-                    <div class="menu-text">
-                        Informasi jadwal praktek dokter di setiap poli yang tersedia.
-                    </div>
-                    <a href="jadwal_dokter.php" class="btn btn-outline-secondary menu-btn w-100">
-                        Lihat Jadwal
-                    </a>
-                </div>
-            </div>
-        </div>
+        
 
         <!-- SECTION BAWAH: ANTRIAN AKTIF + REKAM TERAKHIR -->
         <div class="row g-3 mt-4">

@@ -346,18 +346,8 @@ $sqlJadwal = $konek->query("
                 </div>
             </div>
 
-            <div class="col-md-3 col-6">
-                <div class="menu-card">
-                    <div class="menu-title">Jadwal Praktek</div>
-                    <div class="menu-text">
-                        Lihat jadwal praktek Anda di berbagai poli.
-                    </div>
-                    <a href="jadwal.php" class="btn btn-outline-secondary menu-btn w-100">
-                        Lihat Jadwal
-                    </a>
-                </div>
-            </div>
-        </div>
+            
+       
 
         <!-- BAWAH: ANTRIAN AKTIF + REKAM TERAKHIR + JADWAL -->
         <div class="row g-3 mt-4">

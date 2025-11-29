@@ -15,8 +15,18 @@ if (!$poli_id) {
     exit;
 }
 
-// ambil nomor terakhir
-$last = $konek->query("SELECT MAX(nomor) AS nomor FROM antrian WHERE poli_id = $poli_id")->fetch_assoc();
+// 1. Ambil tanggal hari ini
+$today = date('Y-m-d'); 
+
+// 2. Ambil nomor terakhir HARI INI untuk poli ini
+// Jika hari sudah ganti, query ini akan mengembalikan NULL (0) dan nomor dimulai dari 1.
+$last = $konek->query("
+    SELECT MAX(nomor) AS nomor 
+    FROM antrian 
+    WHERE poli_id = $poli_id 
+    AND DATE(waktu_daftar) = '$today' -- <-- BARIS KRUSIAL (FILTER TANGGAL)
+")->fetch_assoc();
+
 $next = ($last["nomor"] ?? 0) + 1;
 
 // ambil nama pasien
@@ -28,6 +38,7 @@ $dok = $konek->query("SELECT id FROM dokter WHERE poli_id = $poli_id LIMIT 1")->
 $id_dokter = $dok["id"] ?? NULL;
 
 // insert antrian baru
+// Kolom waktu_daftar di tabel antrian harus memiliki DEFAULT VALUE: CURRENT_TIMESTAMP
 $konek->query("
     INSERT INTO antrian (nomor, pasien_id, nama_pasien, dokter_id, poli_id)
     VALUES ($next, $id_pasien, '$nama_pasien', $id_dokter, $poli_id)
