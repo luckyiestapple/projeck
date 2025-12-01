@@ -52,8 +52,6 @@ $jadwal = $konek->query("
                 <li class="nav-item"><a class="nav-link" href="#layanan">Poli</a></li>
                 <li class="nav-item"><a class="nav-link" href="#dokter">Dokter</a></li>
                 <li class="nav-item"><a class="nav-link" href="#jadwal">Jadwal</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm ms-2" href="login.php">Masuk</a></li>
-                <li class="nav-item"><a class="nav-link btn btn-outline-primary btn-sm ms-2" href="register.php">Daftar</a></li>
             </ul>
         </div>
     </div>
@@ -89,6 +87,39 @@ $jadwal = $konek->query("
 
     </div>
 </div>
+
+<p>Temukan dokter spesialis yang sesuai dengan kebutuhan Anda. 
+    Jadwal praktik di bawah diperbarui secara berkala, 
+    namun kami sangat menganjurkan Anda untuk melakukan Registrasi 
+    sebelum kedatangan untuk konfirmasi jam praktik terbaru dan ketersediaan kuota pendaftaran.</p>
+
+<!-- JADWAL -->
+<section id="jadwal" class="container py-5">
+    <h2 class="section-title text-center mb-4">Jadwal Praktek Dokter</h2>
+
+    <table class="table table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>Dokter</th>
+                <th>Poli</th>
+                <th>Hari</th>
+                <th>Mulai</th>
+                <th>Selesai</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($j = $jadwal->fetch_assoc()): ?>
+            <tr>
+                <td><?= $j["dokter"] ?></td>
+                <td><?= $j["nama_poli"] ?></td>
+                <td><?= $j["hari"] ?></td>
+                <td><?= $j["jam_mulai"] ?></td>
+                <td><?= $j["jam_selesai"] ?></td>
+            </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+</section>
 
 <!-- POLI -->
 <section id="layanan" class="container py-5 text-center">
@@ -130,33 +161,12 @@ $jadwal = $konek->query("
     </div>
 </section>
 
-<!-- JADWAL -->
-<section id="jadwal" class="container py-5">
-    <h2 class="section-title text-center mb-4">Jadwal Praktek Dokter</h2>
+<p>Untuk kemudahan akses layanan, melihat riwayat medis, 
+    dan membuat janji temu dengan dokter secara real-time, 
+    silakan Buat Akun Pasien terlebih dahulu atau Masuk (Login) jika Anda sudah terdaftar.</p>
 
-    <table class="table table-bordered">
-        <thead class="table-primary">
-            <tr>
-                <th>Dokter</th>
-                <th>Poli</th>
-                <th>Hari</th>
-                <th>Mulai</th>
-                <th>Selesai</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php while ($j = $jadwal->fetch_assoc()): ?>
-            <tr>
-                <td><?= $j["dokter"] ?></td>
-                <td><?= $j["nama_poli"] ?></td>
-                <td><?= $j["hari"] ?></td>
-                <td><?= $j["jam_mulai"] ?></td>
-                <td><?= $j["jam_selesai"] ?></td>
-            </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
-</section>
+                <a class="nav-link btn btn-outline-primary btn-sm ms-2" href="login.php">Masuk</a>
+                <a class="nav-link btn btn-outline-primary btn-sm ms-2" href="register.php">Daftar</a>
 
 <!-- FOOTER -->
 <footer class="footer text-center">

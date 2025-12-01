@@ -309,7 +309,7 @@ $sqlJadwal = $konek->query("
         <hr class="my-4" style="border-color:#e5e7eb;">
 
         <!-- MENU -->
-        <div class="row g-3">
+        <div class="row g-3"center>
             <div class="col-md-3 col-6">
                 <div class="menu-card">
                     <div class="menu-title">Kelola Antrian</div>
@@ -328,9 +328,10 @@ $sqlJadwal = $konek->query("
                     <div class="menu-text">
                         Akses rekam medis pasien yang pernah Anda tangani.
                     </div>
-                    <a href="rekam.php" class="btn btn-outline-primary menu-btn w-100">
-                        Lihat Rekam
-                    </a>
+                    <a href="cari_rekam_medis.php" class="btn btn-primary menu-btn w-100">
+                    <i class="fas fa-notes-medical me-1"></i> Riwayat Rekam Medis
+                </a>
+                </a>
                 </div>
             </div>
 

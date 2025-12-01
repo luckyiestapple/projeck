@@ -44,6 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
     <a class="navbar-brand" href="dashboard_dokter.php">Panel Dokter</a>
+    <div class="ms-auto">
+        <a href="dashboard_dokter.php" class="btn btn-sm btn-outline-light">
+            <i class="fas fa-sign-out-alt me-1"></i> Keluar
+        </a>
 </nav>
 
 <div class="container py-4">

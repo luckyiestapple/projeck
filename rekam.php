@@ -31,17 +31,18 @@ $rekam = $konek->query("
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
     <a class="navbar-brand" href="dashboard_dokter.php">Panel Dokter</a>
+    <div class="ms-auto">
+        <a href="dashboard_dokter.php" class="btn btn-sm btn-outline-light">
+            <i class="fas fa-sign-out-alt me-1"></i> Keluar
+        </a>
 
-    <div>
-        <a class="nav-link d-inline text-white" href="dashboard_dokter.php">Dashboard</a>
-        <a class="nav-link d-inline text-warning" href="logout.php">Logout</a>
-    </div>
+   
 </nav>
 
 <div class="container py-4">
     <h3>Rekam Medis</h3>
 
-    <a href="tambah_rekam.php" class="btn btn-primary mb-3">Tambah Rekam Medis</a>
+   
 
     <table class="table table-bordered">
         <thead class="table-success">
