@@ -45,7 +45,7 @@ $pasien = $konek->query("SELECT * FROM pasien $where ORDER BY nama ASC");
                 <i class="fa-solid fa-hospital-user me-2"></i> Kelola Pasien
             </span>
             <div class="d-flex align-items-center">
-                <a href="indexadmin.php" class="btn btn-outline-secondary btn-sm me-2">
+                <a href="dashboard_admin.php" class="btn btn-outline-secondary btn-sm me-2">
                     <i class="fa-solid fa-house"></i> Overview
                 </a>
                 <a href="logout.php" class="btn btn-outline-danger btn-sm">

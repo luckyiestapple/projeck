@@ -47,9 +47,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $newNumber = 1;
         }
 
+<<<<<<< Updated upstream
         // Format angka menjadi 4 digit (misal: 1 -> 0001, 1765 -> 1765)
         $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
         $no_rm = 'RM' . $formattedNumber;
+=======
+    if (empty($errors)) {
+
+        // ============================================================
+        // 🔥 GENERATE NOMOR RM BERURUTAN MENGGUNAKAN AUTO INCREMENT ID
+        // ============================================================
+
+        // Ambil ID terakhir
+        $getLast = $konek->query("SELECT id FROM pasien ORDER BY id DESC LIMIT 1");
+        $last = $getLast->fetch_assoc();
+        $nextID = $last ? $last["id"] + 1 : 1;
+
+        // Format RM-001
+        $no_rm = "RM-" . str_pad($nextID, 3, "0", STR_PAD_LEFT);
+
+        // ============================================================
+
+        $hash  = password_hash($password, PASSWORD_BCRYPT);
+>>>>>>> Stashed changes
 
         // 5. Hash Password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
