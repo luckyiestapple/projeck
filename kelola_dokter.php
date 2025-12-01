@@ -7,7 +7,6 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
     exit;
 }
 
-// HAPUS
 if (isset($_GET["hapus"])) {
     $id_hapus = (int) $_GET["hapus"];
     $konek->query("DELETE FROM dokter WHERE id = $id_hapus");
@@ -15,7 +14,6 @@ if (isset($_GET["hapus"])) {
     exit;
 }
 
-// SIMPAN / UPDATE
 $editData = null;
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id        = (int)($_POST["id"] ?? 0);
@@ -27,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $password  = trim($_POST["password"] ?? "");
 
     if ($id > 0) {
-        // UPDATE
+       
         if ($password !== "") {
             $stmt = $konek->prepare("UPDATE dokter SET nama=?, spesialisasi=?, poli=?, email=?, sip=?, password=? WHERE id=?");
             $stmt->bind_param("ssssssi", $nama, $spesialis, $poli, $email, $sip, $password, $id);
@@ -38,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $stmt->execute();
         $stmt->close();
     } else {
-        // INSERT
+       
         $stmt = $konek->prepare("INSERT INTO dokter (nama, spesialisasi, poli, email, sip, password) VALUES (?,?,?,?,?,?)");
         $stmt->bind_param("ssssss", $nama, $spesialis, $poli, $email, $sip, $password);
         $stmt->execute();
@@ -49,13 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
 }
 
-// MODE EDIT
 if (isset($_GET["edit"])) {
     $id_edit  = (int) $_GET["edit"];
     $editData = $konek->query("SELECT * FROM dokter WHERE id = $id_edit")->fetch_assoc();
 }
 
-// AMBIL SEMUA DOKTER
 $dokter = $konek->query("SELECT * FROM dokter ORDER BY nama ASC");
 ?>
 <!DOCTYPE html>
@@ -89,7 +85,7 @@ $dokter = $konek->query("SELECT * FROM dokter ORDER BY nama ASC");
 
     <div class="container my-4">
         <div class="row g-3">
-            <!-- FORM -->
+          
             <div class="col-lg-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
@@ -148,7 +144,6 @@ $dokter = $konek->query("SELECT * FROM dokter ORDER BY nama ASC");
                 </div>
             </div>
 
-            <!-- LIST -->
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                     <div class="card-body">

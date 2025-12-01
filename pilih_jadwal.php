@@ -61,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["ambil"])) {
     exit;
 }
 
-// MODE TAMPIL JADWAL
 $poli_id = (int) ($_POST["poli_id"] ?? $_GET["poli_id"] ?? 0);
 if ($poli_id <= 0) {
     header("Location: pilih_poli.php");

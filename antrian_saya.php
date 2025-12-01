@@ -9,7 +9,6 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "pasien") {
 
 $id_pasien = $_SESSION["id_pasien"];
 
-// MODE AJAX
 if (isset($_GET["ajax"]) && $_GET["ajax"] == "1") {
     $sql = $konek->query("
         SELECT a.*, p.nama_poli, d.nama AS nama_dokter

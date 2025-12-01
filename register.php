@@ -1,98 +1,78 @@
 <?php
 session_start();
-require "koneksi.php"; // Pastikan file koneksi.php sudah tersedia
+require "koneksi.php";
 
 $error = '';
 $success = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 1. Ambil dan Sanitasi Input
-    $nama            = htmlspecialchars($_POST['nama']);
-    $email           = htmlspecialchars($_POST['email']);
-    $password        = $_POST['password'];
-    $alamat          = htmlspecialchars($_POST['alamat']);
-    $no_hp           = htmlspecialchars($_POST['no_hp']);
-    $tanggal_lahir   = htmlspecialchars($_POST['tgl_lahir']);
-    $jenis_kelamin   = htmlspecialchars($_POST['jenis_kelamin']);
 
-    // 2. Validasi Dasar
+    $nama          = trim($_POST['nama']);
+    $email         = trim($_POST['email']);
+    $password      = $_POST['password'];
+    $alamat        = trim($_POST['alamat']);
+    $no_hp         = trim($_POST['no_hp']);
+    $tanggal_lahir = trim($_POST['tanggal_lahir']);
+    $jenis_kelamin = trim($_POST['jenis_kelamin']);  // pastikan DB menerima string ini
+
     if (empty($nama) || empty($email) || empty($password) || empty($alamat) || empty($no_hp)) {
         $error = "Semua kolom wajib diisi!";
     }
 
-    // 3. Cek apakah email sudah terdaftar
-    $stmt_email = $konek->prepare("SELECT id FROM pasien WHERE email = ?");
-    $stmt_email->bind_param("s", $email);
-    $stmt_email->execute();
-    $stmt_email->store_result();
-    if ($stmt_email->num_rows > 0) {
-        $error = "Email sudah terdaftar. Silakan gunakan email lain atau login.";
-    }
-    $stmt_email->close();
+    if (!$error) {
+        $stmt_email = $konek->prepare("SELECT id FROM pasien WHERE email = ?");
+        $stmt_email->bind_param("s", $email);
+        $stmt_email->execute();
+        $stmt_email->store_result();
 
-    // 4. GENERASI NOMOR REKAM MEDIS OTOMATIS (FIX UNTUK DUPLICATE ENTRY)
-    if (empty($error)) {
-        $no_rm = '';
-        
-        // Ambil nomor RM terbesar saat ini
-        $q = $konek->query("SELECT no_rm FROM pasien ORDER BY id DESC LIMIT 1");
-        $lastRM = $q->fetch_assoc();
-
-        if ($lastRM) {
-            // Asumsi format: RM[angka]
-            $lastNumber = (int) substr($lastRM['no_rm'], 2); // Ambil angka setelah 'RM'
-            $newNumber = $lastNumber + 1;
-        } else {
-            // Jika data kosong, mulai dari 1
-            $newNumber = 1;
+        if ($stmt_email->num_rows > 0) {
+            $error = "Email sudah terdaftar.";
         }
 
-<<<<<<< Updated upstream
-        // Format angka menjadi 4 digit (misal: 1 -> 0001, 1765 -> 1765)
-        $formattedNumber = str_pad($newNumber, 4, '0', STR_PAD_LEFT);
-        $no_rm = 'RM' . $formattedNumber;
-=======
-    if (empty($errors)) {
+        $stmt_email->close();
+    }
 
-        // ============================================================
-        // 🔥 GENERATE NOMOR RM BERURUTAN MENGGUNAKAN AUTO INCREMENT ID
-        // ============================================================
+    if (!$error) {
 
-        // Ambil ID terakhir
+        // Generate RM berurutan berdasarkan ID terakhir
         $getLast = $konek->query("SELECT id FROM pasien ORDER BY id DESC LIMIT 1");
-        $last = $getLast->fetch_assoc();
-        $nextID = $last ? $last["id"] + 1 : 1;
+        $lastID  = $getLast->fetch_assoc();
+        $nextID  = $lastID ? $lastID["id"] + 1 : 1;
 
-        // Format RM-001
         $no_rm = "RM-" . str_pad($nextID, 3, "0", STR_PAD_LEFT);
 
-        // ============================================================
-
-        $hash  = password_hash($password, PASSWORD_BCRYPT);
->>>>>>> Stashed changes
-
-        // 5. Hash Password
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-        // 6. Masukkan Data ke Database
         $stmt_insert = $konek->prepare("
-            INSERT INTO pasien (no_rm, nama, email, password, alamat, no_hp, tgl_lahir, jenis_kelamin) 
+            INSERT INTO pasien (no_rm, nama, email, password, alamat, no_hp, tgl_lahir, jenis_kelamin)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
-        $stmt_insert->bind_param("ssssssss", 
-            $no_rm, $nama, $email, $hashed_password, $alamat, $no_hp, $tanggal_lahir, $jenis_kelamin
+
+        $stmt_insert->bind_param(
+            "ssssssss",
+            $no_rm,
+            $nama,
+            $email,
+            $hashed_password,
+            $alamat,
+            $no_hp,
+            $tanggal_lahir,
+            $jenis_kelamin
         );
 
         if ($stmt_insert->execute()) {
-            // 7. Registrasi Sukses, Otomatis Login
+
             $_SESSION["id_pasien"] = $konek->insert_id;
             $_SESSION["nama"]      = $nama;
             $_SESSION["role"]      = "pasien";
+
             header("Location: dashboard_pasien.php");
             exit;
+
         } else {
-            $error = "Pendaftaran gagal. Silakan coba lagi. (" . $konek->error . ")";
+            $error = "Pendaftaran gagal: " . $stmt_insert->error;
         }
+
         $stmt_insert->close();
     }
 }
