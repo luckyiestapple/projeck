@@ -9,13 +9,10 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "dokter") {
 
 $id_dokter = $_SESSION["id_dokter"];
 
-// data dokter
 $dokter = $konek->query("SELECT * FROM dokter WHERE id = $id_dokter")->fetch_assoc();
 
-// hari ini
 $today = date('Y-m-d');
 
-// total antrian hari ini
 $sqlAntrianToday = $konek->query("
     SELECT COUNT(*) AS jml
     FROM antrian
@@ -24,7 +21,6 @@ $sqlAntrianToday = $konek->query("
 ");
 $totalAntrianToday = $sqlAntrianToday->fetch_assoc()["jml"] ?? 0;
 
-// total selesai hari ini
 $sqlSelesaiToday = $konek->query("
     SELECT COUNT(*) AS jml
     FROM antrian
@@ -34,7 +30,6 @@ $sqlSelesaiToday = $konek->query("
 ");
 $totalSelesaiToday = $sqlSelesaiToday->fetch_assoc()["jml"] ?? 0;
 
-// antrian berjalan (Dipanggil prioritas, lalu Menunggu paling awal)
 $sqlCurrent = $konek->query("
     SELECT a.*, p.nama AS nama_pasien, pl.nama_poli
     FROM antrian a
@@ -47,7 +42,6 @@ $sqlCurrent = $konek->query("
 ");
 $antrianAktif = $sqlCurrent->fetch_assoc();
 
-// total rekam medis (pasien pernah ditangani)
 $sqlRMtotal = $konek->query("
     SELECT COUNT(*) AS jml
     FROM rekam_medis
@@ -55,7 +49,6 @@ $sqlRMtotal = $konek->query("
 ");
 $totalRM = $sqlRMtotal->fetch_assoc()["jml"] ?? 0;
 
-// rekam medis terakhir (5 pasien terakhir)
 $sqlLastRM = $konek->query("
     SELECT rm.*, p.nama AS nama_pasien
     FROM rekam_medis rm
@@ -65,7 +58,6 @@ $sqlLastRM = $konek->query("
     LIMIT 5
 ");
 
-// jadwal dokter
 $sqlJadwal = $konek->query("
     SELECT *
     FROM jadwal_dokter

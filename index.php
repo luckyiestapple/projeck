@@ -168,7 +168,6 @@ $jadwal = $konek->query("
                 <a class="nav-link btn btn-outline-primary btn-sm ms-2" href="login.php">Masuk</a>
                 <a class="nav-link btn btn-outline-primary btn-sm ms-2" href="register.php">Daftar</a>
 
-<!-- FOOTER -->
 <footer class="footer text-center">
     © <?= date('Y') ?> RS Citra Medika — Sistem Informasi Rumah Sakit
 </footer>
