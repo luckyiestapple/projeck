@@ -15,11 +15,7 @@ if (!$poli_id) {
     exit;
 }
 
-// 1. Ambil tanggal hari ini
 $today = date('Y-m-d'); 
-
-// 2. Ambil nomor terakhir HARI INI untuk poli ini
-// Jika hari sudah ganti, query ini akan mengembalikan NULL (0) dan nomor dimulai dari 1.
 $last = $konek->query("
     SELECT MAX(nomor) AS nomor 
     FROM antrian 
