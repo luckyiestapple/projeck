@@ -57,7 +57,11 @@ $jadwal = $konek->query("
 </nav>
 
 <!-- SLIDER -->
-<div id="slider" class="carousel slide" data-bs-ride="carousel" style="margin-top:70px;">
+<div id="slider" class="carousel slide" 
+     data-bs-ride="carousel" 
+     data-bs-interval="3000"
+     style="margin-top:70px;">
+
     <div class="carousel-inner">
 
         <div class="carousel-item active">
