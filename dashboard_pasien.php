@@ -9,7 +9,6 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "pasien") {
 
 $id_pasien = $_SESSION["id_pasien"];
 
-// data pasien
 $pasien = $konek->query("SELECT * FROM pasien WHERE id = $id_pasien")->fetch_assoc();
 
 // antrian aktif (menunggu / dipanggil)
@@ -25,7 +24,6 @@ $sqlAktif = $konek->query("
 ");
 $antrianAktif = $sqlAktif->fetch_assoc();
 
-// jumlah rekam medis
 $sqlRM = $konek->query("
     SELECT COUNT(*) AS jml
     FROM rekam_medis
@@ -214,7 +212,6 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
 </head>
 <body>
 
-<!-- TOP BAR SIMPLE -->
 <div class="top-bar">
     <div>
         <div class="top-title">Portal Pasien</div>
@@ -230,7 +227,7 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
 
 <div class="main-wrap">
     <div class="card-main">
-        <!-- ROW ATAS: WELCOME + RINGKASAN -->
+      
         <div class="row g-3 align-items-start">
             <div class="col-md-7">
                 <span class="badge-rm">No. RM: <?= htmlspecialchars($pasien["no_rm"]) ?></span>
@@ -286,7 +283,6 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
 
         <hr class="my-4" style="border-color:#e5e7eb;">
 
-        <!-- MENU UTAMA -->
         <div class="row g-3">
             <div class="col-md-3 col-6">
                 <div class="menu-card">
@@ -324,9 +320,6 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
                 </div>
             </div>
 
-        
-
-        <!-- SECTION BAWAH: ANTRIAN AKTIF + REKAM TERAKHIR -->
         <div class="row g-3 mt-4">
             <div class="col-md-6">
                 <div class="section-title">Antrian Aktif</div>

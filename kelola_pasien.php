@@ -15,7 +15,6 @@ if (isset($_GET["hapus"])) {
     exit;
 }
 
-// search (opsional)
 $cari = trim($_GET["cari"] ?? "");
 $where = "";
 if ($cari !== "") {

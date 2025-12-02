@@ -4,7 +4,6 @@ require "koneksi.php";
 
 $error = "";
 
-// Proses login
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email    = trim($_POST["email"] ?? "");
     $password = $_POST["password"] ?? "";
@@ -12,8 +11,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($email === "" || $password === "") {
         $error = "Email dan password wajib diisi.";
     } else {
-
-        // 1. Coba sebagai ADMIN
         $stmt = $konek->prepare("SELECT id, nama, password FROM admin WHERE email = ? LIMIT 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -28,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
 
-        // 2. Coba sebagai DOKTER
         $stmt = $konek->prepare("SELECT id, nama, password FROM dokter WHERE email = ? LIMIT 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -43,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
 
-        // 3. Coba sebagai PASIEN (password HASH)
         $stmt = $konek->prepare("SELECT id, nama, password FROM pasien WHERE email = ? LIMIT 1");
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -58,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
 
-        // kalau semua gagal
         $error = "Email atau password salah.";
     }
 }
@@ -69,10 +63,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Login - Sistem Rumah Sakit</title>
 
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Google Font (biar mirip UI modern) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>

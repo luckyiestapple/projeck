@@ -2,7 +2,6 @@
 session_start();
 require "koneksi.php";
 
-// cek role admin
 if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
     header("Location: login.php");
     exit;
@@ -10,12 +9,10 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "admin") {
 
 $nama_admin = $_SESSION["nama"] ?? "Administrator";
 
-// total pasien
 $total_pasien = $konek->query("SELECT COUNT(*) AS jml FROM pasien")->fetch_assoc()["jml"] ?? 0;
-// total dokter
+
 $total_dokter = $konek->query("SELECT COUNT(*) AS jml FROM dokter")->fetch_assoc()["jml"] ?? 0;
 
-// antrian hari ini
 $today = date('Y-m-d');
 $stat = $konek->query("
     SELECT 
@@ -30,7 +27,6 @@ $antrian_hari_ini = $stat["total"] ?? 0;
 $antrian_menunggu = $stat["menunggu"] ?? 0;
 $selesai_hari_ini  = $stat["selesai"] ?? 0;
 
-// persentase progress
 $total_antrian   = $antrian_menunggu + $selesai_hari_ini;
 $persen_selesai  = ($total_antrian > 0) ? round($selesai_hari_ini / $total_antrian * 100) : 0;
 $persen_menunggu = ($total_antrian > 0) ? round($antrian_menunggu / $total_antrian * 100) : 0;
@@ -64,7 +60,7 @@ $persen_menunggu = ($total_antrian > 0) ? round($antrian_menunggu / $total_antri
     </nav>
 
     <div class="container my-4">
-        <!-- RINGKASAN -->
+      
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>Ringkasan Sistem</h4>
             <div class="d-flex gap-2">
@@ -112,7 +108,6 @@ $persen_menunggu = ($total_antrian > 0) ? round($antrian_menunggu / $total_antri
             </div>
         </div>
 
-        <!-- STATISTIK ANTRIAN -->
         <div class="row">
             <div class="col-lg-8 mb-3">
                 <div class="card shadow-sm">

@@ -9,12 +9,10 @@ $dokter = $konek->query("SELECT * FROM dokter ORDER BY nama ASC LIMIT 6");
 
 // Ambil jadwal dokter
 $jadwal = $konek->query("
-    SELECT j.*, d.nama AS dokter, p.nama_poli 
+    SELECT j.*, d.nama AS dokter, d.poli
     FROM jadwal_dokter j
     JOIN dokter d ON d.id = j.dokter_id
-    JOIN poli p ON p.id = j.poli_id
-    ORDER BY FIELD(hari, 'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu')
-    LIMIT 5
+    ORDER BY FIELD(j.hari, 'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu')
 ");
 ?>
 <!DOCTYPE html>
@@ -51,7 +49,8 @@ $jadwal = $konek->query("
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link" href="#layanan">Poli</a></li>
                 <li class="nav-item"><a class="nav-link" href="#dokter">Dokter</a></li>
-                <li class="nav-item"><a class="nav-link" href="#jadwal">Jadwal</a></li>
+                <li class="nav-item"><a class="nav-link" href="#jadwal">Jadwal</a></li>  
+                <li class="nav-item"><a class="nav-link" href="login.php">Masuk</a></li>
             </ul>
         </div>
     </div>
@@ -62,7 +61,7 @@ $jadwal = $konek->query("
     <div class="carousel-inner">
 
         <div class="carousel-item active">
-            <img src="img/gedung.jpg" class="d-block w-100" style="height:500px; object-fit:cover;">
+            <img src="img/gedung.png" class="d-block w-100" style="height:500px; object-fit:cover;">
             <div class="carousel-caption d-none d-md-block text-start">
                 <h1 class="hero-title">Pelayanan Kesehatan Terbaik</h1>
                 <p>Didukung dokter profesional & peralatan modern.</p>
@@ -87,12 +86,31 @@ $jadwal = $konek->query("
 
     </div>
 </div>
+<div class="container my-4">
+    <div style="
+    max-width: 900px;
+    background: #ffff;
+    border-radius: 12px;
+    padding: 22px 28px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+    border-left: 6px solid #0d6efd;
+    margin: 0 auto;">
 
-<p>Temukan dokter spesialis yang sesuai dengan kebutuhan Anda. 
-    Jadwal praktik di bawah diperbarui secara berkala, 
-    namun kami sangat menganjurkan Anda untuk melakukan Registrasi 
-    sebelum kedatangan untuk konfirmasi jam praktik terbaru dan ketersediaan kuota pendaftaran.</p>
-
+    <p style="
+    text-align: justify;
+    font-size: 15px;
+    color: #444;
+    line-height: 1.6;
+    margin:0;">
+    Temukan dokter spesialis yang sesuai dengan kebutuhan Anda dengan jadwal praktek yang selalu diperbarui.
+    Untuk memudahkan proses pendaftaran, antrean, dan akses rekam medis, kamu menyarankan Anda membuat Akun Pasien terlebih dahulu. 
+    Dengan akun, Anda dapat mengambil antrean secara online, memantau status antrean secara real-time, serta melihat riwayat medis kapan saja.
+    <br>
+    Jika Anda sudah memiliki Akun, silakan Masuk untuk melanjutkan. Pelayanan kesehatan yang lebih cepat, mudah, dan nyaman dimulai dari sini. 
+   
+</p>
+    </div>
+</div>
 <!-- JADWAL -->
 <section id="jadwal" class="container py-5">
     <h2 class="section-title text-center mb-4">Jadwal Praktek Dokter</h2>
@@ -161,14 +179,6 @@ $jadwal = $konek->query("
     </div>
 </section>
 
-<p>Untuk kemudahan akses layanan, melihat riwayat medis, 
-    dan membuat janji temu dengan dokter secara real-time, 
-    silakan Buat Akun Pasien terlebih dahulu atau Masuk (Login) jika Anda sudah terdaftar.</p>
-
-                <a class="nav-link btn btn-outline-primary btn-sm ms-2" href="login.php">Masuk</a>
-                <a class="nav-link btn btn-outline-primary btn-sm ms-2" href="register.php">Daftar</a>
-
-<!-- FOOTER -->
 <footer class="footer text-center">
     © <?= date('Y') ?> RS Citra Medika — Sistem Informasi Rumah Sakit
 </footer>
@@ -176,3 +186,4 @@ $jadwal = $konek->query("
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+ 
