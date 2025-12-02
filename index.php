@@ -133,7 +133,7 @@ $jadwal = $konek->query("
             <?php while ($j = $jadwal->fetch_assoc()): ?>
             <tr>
                 <td><?= $j["dokter"] ?></td>
-                <td><?= $j["nama_poli"] ?></td>
+                <td><?= $j["poli"] ?></td>
                 <td><?= $j["hari"] ?></td>
                 <td><?= $j["jam_mulai"] ?></td>
                 <td><?= $j["jam_selesai"] ?></td>
