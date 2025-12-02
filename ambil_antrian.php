@@ -25,16 +25,15 @@ $last = $konek->query("
 
 $next = ($last["nomor"] ?? 0) + 1;
 
-// ambil nama pasien
+
 $p = $konek->query("SELECT nama FROM pasien WHERE id = $id_pasien")->fetch_assoc();
 $nama_pasien = $p["nama"];
 
-// cari dokter untuk poli tersebut
+
 $dok = $konek->query("SELECT id FROM dokter WHERE poli_id = $poli_id LIMIT 1")->fetch_assoc();
 $id_dokter = $dok["id"] ?? NULL;
 
-// insert antrian baru
-// Kolom waktu_daftar di tabel antrian harus memiliki DEFAULT VALUE: CURRENT_TIMESTAMP
+
 $konek->query("
     INSERT INTO antrian (nomor, pasien_id, nama_pasien, dokter_id, poli_id)
     VALUES ($next, $id_pasien, '$nama_pasien', $id_dokter, $poli_id)
