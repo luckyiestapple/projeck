@@ -30,6 +30,39 @@ $jadwal = $konek->query("
         .hero-title { font-size: 42px; font-weight: 700; text-shadow: 0 3px 8px rgba(0,0,0,.35); }
         .section-title { font-size: 32px; font-weight: 700; }
         .footer { background:#0d6efd; padding:25px; color:#fff; margin-top:40px; }
+      .slider {
+  width: 100%;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+
+.slides {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  animation: slide 15s infinite;   /* 3 slide × 5 detik = 15 detik */
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes slide {
+  0%   { transform: translateX(0%); }       /* Gambar 1 */
+  33.33% { transform: translateX(-100%); } /* Gambar 2 */
+  66.66% { transform: translateX(-200%); } /* Gambar 3 */
+  100% { transform: translateX(0%); }      /* Kembali ke awal (geser kiri lagi) */
+}
+
     </style>
 </head>
 <body class="bg-light">
@@ -57,39 +90,36 @@ $jadwal = $konek->query("
 </nav>
 
 <!-- SLIDER -->
-<div id="slider" class="carousel slide" 
-     data-bs-ride="carousel" 
-     data-bs-interval="3000"
-     style="margin-top:70px;">
+<div class="slider" style="margin-top:70px;">
+  <div class="slides">
 
-    <div class="carousel-inner">
-
-        <div class="carousel-item active">
-            <img src="img/gedung.png" class="d-block w-100" style="height:500px; object-fit:cover;">
-            <div class="carousel-caption d-none d-md-block text-start">
-                <h1 class="hero-title">Pelayanan Kesehatan Terbaik</h1>
-                <p>Didukung dokter profesional & peralatan modern.</p>
-            </div>
-        </div>
-
-        <div class="carousel-item">
-            <img src="img/rs2.png" class="d-block w-100" style="height: 500px; object-fit:cover;">
-            <div class="carousel-caption d-none d-md-block text-start">
-                <h1 class="hero-title">Daftar Antrian Lebih Mudah</h1>
-                <p>Semuanya serba online, tanpa ribet.</p>
-            </div>
-        </div>
-
-        <div class="carousel-item">
-            <img src="img/dokter.png" class="d-block w-100" style="height:500px; object-fit:cover;">
-            <div class="carousel-caption d-none d-md-block text-start">
-                <h1 class="hero-title">Rekam Medis Digital</h1>
-                <p>Akses riwayat kesehatan Anda kapan saja.</p>
-            </div>
-        </div>
-
+    <div class="slide">
+      <img src="img/gedung.png">
+      <div class="caption">
+        <h1 class="hero-title">Pelayanan Kesehatan Terbaik</h1>
+        <p>Didukung dokter profesional & peralatan modern.</p>
+      </div>
     </div>
+
+    <div class="slide">
+      <img src="img/rs2.png">
+      <div class="caption">
+        <h1 class="hero-title">Daftar Antrian Lebih Mudah</h1>
+        <p>Semuanya serba online, tanpa ribet.</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <img src="img/dokter.png">
+      <div class="caption">
+        <h1 class="hero-title">Rekam Medis Digital</h1>
+        <p>Akses riwayat kesehatan Anda kapan saja.</p>
+      </div>
+    </div>
+
+  </div>
 </div>
+
 <div class="container my-4">
     <div style="
     max-width: 900px;
