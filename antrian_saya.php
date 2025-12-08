@@ -38,6 +38,8 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "1") {
     .navbar-custom{
         background-color: #8FBC8F;
     }
+    
+
 </style>
 </head>
 <body>
