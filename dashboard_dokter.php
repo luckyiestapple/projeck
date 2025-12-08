@@ -17,7 +17,7 @@ $sqlAntrianToday = $konek->query("
     SELECT COUNT(*) AS jml
     FROM antrian
     WHERE dokter_id = $id_dokter
-      AND DATE(waktu_daftar) = '$today'
+    AND DATE(waktu_daftar) = '$today'
 ");
 $totalAntrianToday = $sqlAntrianToday->fetch_assoc()["jml"] ?? 0;
 
@@ -25,8 +25,8 @@ $sqlSelesaiToday = $konek->query("
     SELECT COUNT(*) AS jml
     FROM antrian
     WHERE dokter_id = $id_dokter
-      AND DATE(waktu_daftar) = '$today'
-      AND status = 'Selesai'
+    AND DATE(waktu_daftar) = '$today'
+    AND status = 'Selesai'
 ");
 $totalSelesaiToday = $sqlSelesaiToday->fetch_assoc()["jml"] ?? 0;
 
@@ -36,7 +36,7 @@ $sqlCurrent = $konek->query("
     LEFT JOIN pasien p ON p.id = a.pasien_id
     LEFT JOIN poli pl ON pl.id = a.poli_id
     WHERE a.dokter_id = $id_dokter
-      AND a.status IN ('Menunggu','Dipanggil')
+    AND a.status IN ('Menunggu','Dipanggil')
     ORDER BY FIELD(a.status,'Dipanggil','Menunggu'), a.waktu_daftar ASC
     LIMIT 1
 ");
