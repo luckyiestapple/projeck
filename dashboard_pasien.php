@@ -281,16 +281,16 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
             </div>
         </div>
 
-        <hr class="my-4" style="border-color:#e5e7eb;">
+        <hr class="my-4" style="border-color:#e5e7eb,;">
 
-        <div class="row g-3">
+       <div class="row g-3 justify-content-center">
             <div class="col-md-3 col-6">
                 <div class="menu-card">
                     <div class="menu-title">Ambil Antrian</div>
                     <div class="menu-text">
                         Pilih poli dan jadwal dokter, lalu ambil nomor antrian secara online.
                     </div>
-                    <a href="pilih_poli.php" class="btn btn-success menu-btn w-100">
+                    <a href="pilih_poli.php" class="btn btn-primary menu-btn w-100">
                         Pilih Poli
                     </a>
                 </div>
@@ -314,7 +314,7 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
                     <div class="menu-text">
                         Riwayat diagnose dan catatan dokter yang pernah menangani Anda.
                     </div>
-                    <a href="rekam_medis_saya.php" class="btn btn-outline-primary menu-btn w-100">
+                    <a href="rekam_medis_saya.php" class="btn btn-primary menu-btn w-100">
                         Lihat Rekam
                     </a>
                 </div>

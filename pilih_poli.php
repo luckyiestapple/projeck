@@ -1,11 +1,9 @@
 <?php
-// require "auth_pasien.php" sudah memiliki session_start() di dalamnya
 require "auth_pasien.php"; 
 require "koneksi.php"; 
 
 $id_pasien = $_SESSION["id_pasien"] ?? 0;
 $today = date('Y-m-d');
-// Mengambil poli dari GET parameter, atau POST jika terjadi error
 $id_poli_terpilih = $_GET['poli'] ?? ($_POST['poli_id_selected'] ?? null); 
 $nama_poli_terpilih = '-- Pilih Poli --';
 $error_msg = null;
@@ -14,21 +12,16 @@ $error_msg = null;
 $query_poli = "SELECT id, nama_poli FROM poli ORDER BY nama_poli ASC";
 $result_poli = $konek->query($query_poli);
 
-// -----------------------------------------------------
-// LOGIKA PENGAMBILAN ANTRIAN (POST)
-// -----------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_jadwal_pilihan']) && isset($_POST['keluhan'])) {
     $id_jadwal = intval($_POST['id_jadwal_pilihan']);
     $keluhan = $konek->real_escape_string($_POST['keluhan']);
     
-    // Simpan poli yang dipilih saat POST untuk memastikan jadwal tetap ditampilkan jika gagal
     $id_poli_terpilih = intval($_POST['poli_id_selected']); 
 
     if (!$id_jadwal || empty($keluhan)) {
          $error_msg = "Mohon pilih jadwal dan isi keluhan.";
     } else {
-        // 1. Ambil ID Dokter dan ID Poli dari Jadwal yang dipilih
-        // 🚨 PERBAIKAN QUERY 1: Mengambil poli_id dari tabel jadwal_dokter (jd)
+       
         $sql_data_dokter = $konek->query("
             SELECT 
                 d.id AS dokter_id, 
@@ -44,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_jadwal_pilihan']) &
             $id_dokter = $sql_data_dokter['dokter_id'];
             $poli_id = $sql_data_dokter['poli_id']; // Menggunakan alias 'poli_id' dari query di atas
 
-            // 2. Ambil nomor antrian terakhir HARI INI untuk poli ini
             $last = $konek->query("
                 SELECT MAX(nomor) AS nomor 
                 FROM antrian 
@@ -69,21 +61,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['id_jadwal_pilihan']) &
     }
 }
 
-// -----------------------------------------------------
-// LOGIKA TAMPIL JADWAL (GET/Setelah POST Gagal)
-// -----------------------------------------------------
 $result_jadwal = null;
 if ($id_poli_terpilih) {
     $id_poli_terpilih = intval($id_poli_terpilih);
     
-    // Ambil nama poli
     $p = $konek->query("SELECT nama_poli FROM poli WHERE id = $id_poli_terpilih")->fetch_assoc();
     if ($p) {
         $nama_poli_terpilih = $p['nama_poli'];
     }
 
-    // Query untuk mengambil jadwal dokter berdasarkan poli yang dipilih
-    // 🚨 PERBAIKAN QUERY 2: Menggunakan jd.poli_id di klausa WHERE
     $query_jadwal = "
         SELECT 
             jd.id AS id_jadwal,
@@ -109,25 +95,121 @@ if ($id_poli_terpilih) {
     <title>Pilih Poli & Ambil Antrian</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container-box { background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); width: 95%; max-width: 700px; position: relative; }
-        h2 { text-align: center; color: #333; margin-bottom: 25px; }
-        .poli-select-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        .poli-select-group select { flex-grow: 1; }
-        .selected-row { background-color: #ffc10740; } 
+        * {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #c7ddff, #eef2ff);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.container-box {
+    background: rgba(255,255,255,0.95);
+    padding: 35px 40px 40px;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    width: 95%;
+    max-width: 820px;
+    position: relative;
+    animation: fadeIn .5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.title-line {
+    height: 4px;
+    width: 80px;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    border-radius: 99px;
+    margin-bottom: 25px;
+}
+
+.poli-select-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.selected-row {
+    background: rgba(37,99,235,0.12) !important;
+}
+
+.table thead {
+    background: #f1f5f9;
+}
+
+.table th {
+    font-weight: 600;
+    color: #334155;
+}
+
+.alert-info {
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    color: #0369a1;
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.form-control, .form-select {
+    border-radius: 12px;
+    border: 1px solid #cbd5f5;
+    padding: 11px 14px;
+}
+
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 4px rgba(59,130,246,.25);
+    border-color: #2563eb;
+}
+
+.konfirmasi-btn {
+    border-radius: 999px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    border: none;
+    font-size: 16px;
+    box-shadow: 0 8px 20px rgba(37,99,235,.35);
+}
+
+.konfirmasi-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37,99,235,.45);
+}
+
+.kembali-btn {
+    border-radius: 999px;
+    padding: 8px 18px;
+}
+
     </style>
 </head>
 <body>
 
     <div class="container-box">
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#konfirmasiModal">
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#konfirmasiModal">
                 Kembali
             </button>
         </div>
 
-        <h2>Sistem Pendaftaran Online Pasien</h2>
-        
+       <h2 class="page-title">Sistem Pendaftaran Online Pasien</h2>
+        <div class="title-line"></div>
+
         <?php if ($error_msg): ?>
             <div class="alert alert-danger"><?= $error_msg ?></div>
         <?php endif; ?>
@@ -198,7 +280,7 @@ if ($id_poli_terpilih) {
                     <small class="form-text text-muted">Diperlukan untuk proses pendaftaran antrian.</small>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100 py-3 konfirmasi-btn">Konfirmam & Ambil Antrian</button>
+                <button type="submit" class="btn btn-primary w-100 py-3 konfirmasi-btn">Konfirmasi & Ambil Antrian</button>
             </form>
         <?php else: ?>
             <div class="alert alert-info text-center">Silakan Pilih Poli yang Anda tuju pada dropdown di atas.</div>

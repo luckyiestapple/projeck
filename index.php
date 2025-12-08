@@ -14,7 +14,7 @@ SELECT
     d.poli,
     GROUP_CONCAT(
         CONCAT(
-            '• ', j.hari, ' (',
+            j.hari, ' (',
             TIME_FORMAT(j.jam_mulai, '%H:%i'),
             ' - ',
             TIME_FORMAT(j.jam_selesai, '%H:%i'),
@@ -186,7 +186,7 @@ ORDER BY d.nama ASC
                 $list = explode('|', $j["jadwal_praktek"]);
                 foreach ($list as $item):
               ?>
-                <li class="list-group-item bg-transparent px-0 py-1">
+                <li class=" list-group-item bg-transparent px-0 py-1">
                   <?= $item ?>
                 </li>
               <?php endforeach; ?>

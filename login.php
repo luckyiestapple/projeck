@@ -68,79 +68,105 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * { font-family: 'Inter', sans-serif; }
+       * { 
+    font-family: 'Inter', sans-serif; 
+}
 
-        body {
-            min-height: 100vh;
-            background: radial-gradient(circle at top, #e0f2ff 0, #f4f6fb 45%, #eef1f6 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #c7ddff, #eef2ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .login-card {
-            width: 380px;
-            background: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
-            padding: 28px 30px 30px;
-        }
+.login-card {
+    width: 380px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(14px);
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+    padding: 35px 32px;
+    animation: fadeIn 0.7s ease;
+}
 
-        .login-title {
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 18px;
-            color: #111827;
-        }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
-        label {
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
-        }
+.login-title {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 22px;
+    color: #1e293b;
+    letter-spacing: .3px;
+}
 
-        .form-control {
-            border-radius: 10px;
-            border-color: #d1d5db;
-            padding: 10px 12px;
-        }
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
 
-        .form-control:focus {
-            box-shadow: 0 0 0 3px rgba(59,130,246,.25);
-            border-color: #2563eb;
-        }
+.form-control {
+    border-radius: 12px;
+    border: 1px solid #cbd5f5;
+    padding: 11px 14px;
+    transition: .3s ease;
+}
 
-        .btn-primary {
-            border-radius: 999px;
-            padding: 10px 16px;
-            font-weight: 600;
-            background: #2563eb;
-            border-color: #2563eb;
-            font-size: 16px;
-        }
+.form-control:focus {
+    box-shadow: 0 0 0 4px rgba(59,130,246,.25);
+    border-color: #2563eb;
+}
 
-        .btn-primary:hover {
-            background: #1d4ed8;
-            border-color: #1d4ed8;
-        }
+.btn-primary {
+    border-radius: 999px;
+    padding: 12px 16px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    border: none;
+    font-size: 16px;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+    transition: .3s ease;
+}
 
-        .small-text {
-            font-size: 13px;
-        }
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.45);
+}
 
-        .error-alert {
-            font-size: 13px;
-            padding: 8px 10px;
-            border-radius: 10px;
-        }
+.small-text {
+    font-size: 13px;
+    color: #475569;
+}
+
+.small-text a {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.small-text a:hover {
+    text-decoration: underline;
+}
+
+.error-alert {
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    text-align: center;
+}
+
     </style>
 </head>
 <body>
 
 <div class="login-card">
-
+    
     <h1 class="login-title">Login</h1>
+<div style="height:4px;width:60px;background:#2563eb;border-radius:99px;margin:0 auto 20px;"></div>
 
     <?php if ($error): ?>
         <div class="alert alert-danger error-alert">
@@ -164,6 +190,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <p class="mt-3 text-center small-text">
             Belum punya akun pasien?
             <a href="register.php" class="text-decoration-none">Daftar di sini</a>
+             <p class="mt-3 text-center small-text">
+            Lupa Password?
+            <a href="forget.php" class="text-decoration-none">Klik Disini</a>
         </p>
     </form>
 </div>
