@@ -289,7 +289,7 @@ $rmTerakhir = $sqlRMlast->fetch_assoc();
                     <div class="menu-title">Ambil Antrian</div>
                     <div class="menu-text">
                         Pilih poli dan jadwal dokter, lalu ambil nomor antrian secara online.
-                    </div>
+                    </div> 
                     <a href="pilih_poli.php" class="btn btn-primary menu-btn w-100">
                         Pilih Poli
                     </a>

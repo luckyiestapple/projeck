@@ -227,9 +227,6 @@ body {
                     }
                     ?>
                 </select>
-                <select disabled class="form-select">
-                    <option>Poli Dipilih: <?= htmlspecialchars($nama_poli_terpilih) ?></option>
-                </select>
             </div>
         </form>
 

@@ -35,12 +35,18 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "1") {
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
     body { background:#f9fafb; }
+    .navbar-custom{
+        background-color: #8FBC8F;
+    }
 </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-success px-4">
-    <a class="navbar-brand" href="dashboard_pasien.php">Pasien Panel</a>
+<nav class="navbar navbar-dark navbar-custom px-4">
+    Pasien Panel
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#konfirmasiModal" >
+              <a class="navbar-brand" href="dashboard_pasien.php">Kembali</a>
+            </button>
 </nav>
 
 <div class="container py-4">
