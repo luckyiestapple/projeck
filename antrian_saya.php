@@ -38,17 +38,18 @@ if (isset($_GET["ajax"]) && $_GET["ajax"] == "1") {
     .navbar-custom{
         background-color: #8FBC8F;
     }
-    
-
 </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark navbar-custom px-4">
-    Pasien Panel
-    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#konfirmasiModal" >
-              <a class="navbar-brand" href="dashboard_pasien.php">Kembali</a>
-            </button>
+<!-- ✅ NAVBAR SUDAH DIPERBAIKI -->
+<nav class="navbar navbar-dark navbar-custom px-4 d-flex justify-content-between">
+    <span class="text-white fw-semibold">Pasien Panel</span>
+
+    <!-- ✅ TOMBOL KECIL & BENAR -->
+    <a href="dashboard_pasien.php" class="btn btn-success btn-sm">
+        Kembali
+    </a>
 </nav>
 
 <div class="container py-4">
